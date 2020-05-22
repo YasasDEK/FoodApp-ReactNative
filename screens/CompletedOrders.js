@@ -3,7 +3,6 @@ import {View, Text, Button, StyleSheet} from 'react-native';
 
 const CompletedOrders = () => {
   return (
-    // eslint-disable-next-line react-native/no-inline-styles
     <View style={styles.container}>
       <Text>Completed Orders</Text>
     </View>

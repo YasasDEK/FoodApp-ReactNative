@@ -3,7 +3,6 @@ import {View, Text, Button, StyleSheet} from 'react-native';
 
 const SupportScreen = () => {
   return (
-    // eslint-disable-next-line react-native/no-inline-styles
     <View style={styles.container}>
       <Text>Support</Text>
     </View>

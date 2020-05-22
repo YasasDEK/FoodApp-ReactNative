@@ -1,27 +1,28 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {
+  useTheme,
   Avatar,
   Title,
   Caption,
   Paragraph,
-  Text, 
   Drawer,
+  Text,
   TouchableRipple,
   Switch,
-  ToggleButton,
 } from 'react-native-paper';
+import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export function DrawerContent(props) {
-  const [isDarkTheme, setIsDarkTheme] = React.useState(false);
+import {AuthContext} from '../components/context';
 
-  const toggleTheme = () => {
-    setIsDarkTheme(!isDarkTheme);
-  };
+export function DrawerContent(props) {
+  const paperTheme = useTheme();
+
+  const {signOut, toggleTheme} = React.useContext(AuthContext);
 
   return (
     <View style={{flex: 1}}>
@@ -46,7 +47,7 @@ export function DrawerContent(props) {
                 <Paragraph style={[styles.Paragraph, styles.caption]}>
                   80
                 </Paragraph>
-                <Caption style={styles.Caption}>  Oreder Completed</Caption>
+                <Caption style={styles.Caption}> Oreder Completed</Caption>
               </View>
             </View>
           </View>
@@ -68,7 +69,7 @@ export function DrawerContent(props) {
               onPress={() => {
                 props.navigation.navigate('SupportScreen');
               }}
-            />  
+            />
             <DrawerItem
               icon={({color, size}) => (
                 <Icon name="alert-circle" color={color} size={size} />
@@ -87,7 +88,7 @@ export function DrawerContent(props) {
               <View style={styles.Preference}>
                 <Text>Dark Theme</Text>
                 <View pointerEvents="none">
-                  <Switch value={isDarkTheme} />
+                  <Switch value={paperTheme.dark} />
                 </View>
               </View>
             </TouchableRipple>
@@ -100,7 +101,9 @@ export function DrawerContent(props) {
             <Icon name="exit-to-app" color={color} size={size} />
           )}
           label="Sign Out"
-          onPress={() => {}}
+          onPress={() => {
+            signOut();
+          }}
         />
       </Drawer.Section>
     </View>
