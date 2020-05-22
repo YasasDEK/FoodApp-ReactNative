@@ -1,16 +1,16 @@
 import React from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
 
-const HomeScreen = ({navigation}) => {
+const CompletedOrders = () => {
   return (
     // eslint-disable-next-line react-native/no-inline-styles
     <View style={styles.container}>
-      <Text>Home screen</Text>
+      <Text>Completed Orders</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default CompletedOrders;
 
 const styles = StyleSheet.create({
   container: {

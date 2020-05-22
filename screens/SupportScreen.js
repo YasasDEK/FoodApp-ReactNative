@@ -1,16 +1,16 @@
 import React from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
 
-const HomeScreen = ({navigation}) => {
+const SupportScreen = () => {
   return (
     // eslint-disable-next-line react-native/no-inline-styles
     <View style={styles.container}>
-      <Text>Home screen</Text>
+      <Text>Support</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default SupportScreen;
 
 const styles = StyleSheet.create({
   container: {
