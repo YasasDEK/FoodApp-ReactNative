@@ -120,6 +120,14 @@ const SignInScreen = ({navigation}) => {
         }
     };
 
+    const forgetpasswordHandle = (email) => {
+        firebase.auth().sendPasswordResetEmail(email).then(() => {
+            Alert.alert('Rest you password using email!');
+        }).catch((error) => {
+            Alert.alert(error.message);
+        });
+    };
+
     return (
       <View style={styles.container}>
           <StatusBar backgroundColor='#009387' barStyle="light-content"/>
@@ -215,7 +223,9 @@ const SignInScreen = ({navigation}) => {
             }
 
 
-            <TouchableOpacity>
+            <TouchableOpacity 
+            style={styles.signIn}
+            onPress={() => {forgetpasswordHandle( data.email );}}>
                 <Text style={{color:'#009387', marginTop:15}}>Forgot password?</Text>
             </TouchableOpacity>
             <View style={styles.button}>

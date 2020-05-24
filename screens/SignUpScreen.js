@@ -41,9 +41,9 @@ const SignInScreen = ({ navigation }) => {
         } else if (email === '' || password === '') {
             Alert.alert('Empty input!');
         } else {
-            firebase.auth().createUserWithEmailAndPassword(email, password).then((res) => {
+            firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
                 var user = firebase.auth().currentUser;
-                user.sendEmailVerification().then((result) => {
+                user.sendEmailVerification().then(() => {
                     Alert.alert('Verification Email sent. Please verify your email!');
                     navigation.goBack();
                 }).catch((error) => {
