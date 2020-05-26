@@ -5,6 +5,7 @@
 import React from 'react';
 import firebase from '@react-native-firebase/app';
 import Auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import {
     View,
     Text,
@@ -22,14 +23,23 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+// import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const SignInScreen = ({ navigation }) => {
 
     const [data, setData] = React.useState({
         email: '',
         password: '',
+        mobile: '',
+        shopname: '',
+        ownername: '',
         confirm_password: '',
+        check_password: false,
         check_textInputChange: false,
+        check_mobileInputChange: false,
+        check_owenernameInputChange: false,
+        check_shopnameInputChage: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
     });
@@ -40,9 +50,24 @@ const SignInScreen = ({ navigation }) => {
             Alert.alert('Empty input!');
         } else if (email === '' || password === '') {
             Alert.alert('Empty input!');
-        } else {
-            firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
+        } else if (data.password !== data.confirm_password) {
+            Alert.alert('Password and the confim password does not match!');
+        }
+        else {
+            firebase.auth().createUserWithEmailAndPassword(email, password).then((result) => {
                 var user = firebase.auth().currentUser;
+
+                result.user.updateProfile({displayName: 'shop'});
+
+                firebase.firestore().collection('shops').add({
+                    type: 'shop',
+                    shopname: data.shopname,
+                    ownername: data.ownername,
+                    shopmobile: data.mobile,
+                    shopemail: data.email,
+                    uid: result.user.uid,
+                });
+
                 user.sendEmailVerification().then(() => {
                     Alert.alert('Verification Email sent. Please verify your email!');
                     navigation.goBack();
@@ -71,6 +96,54 @@ const SignInScreen = ({ navigation }) => {
         }
     };
 
+    const ownernameInputChange = (val) => {
+        if (val.length !== 0) {
+            setData({
+                ...data,
+                ownername: val,
+                check_owenernameInputChange: true
+            });
+        } else {
+            setData({
+                ...data,
+                ownername: val,
+                check_owenernameInputChange: false
+            });
+        }
+    };
+
+    const mobileInputChange = (val) => {
+        if (val.length === 10 && isNaN(val) === false) {
+            setData({
+                ...data,
+                mobile: val,
+                check_mobileInputChange: true
+            });
+        } else {
+            setData({
+                ...data,
+                mobile: val,
+                check_mobileInputChange: false
+            });
+        }
+    };
+
+    const shopnameInputChange = (val) => {
+        if (val.length !== 0) {
+            setData({
+                ...data,
+                shopname: val,
+                check_shopnameInputChage: true
+            });
+        } else {
+            setData({
+                ...data,
+                shopname: val,
+                check_shopnameInputChage: false
+            });
+        }
+    };
+
     const handlePasswordChange = (val) => {
         setData({
             ...data,
@@ -81,7 +154,7 @@ const SignInScreen = ({ navigation }) => {
     const handleConfirmPasswordChange = (val) => {
         setData({
             ...data,
-            confirm_password: val
+            confirm_password: val,
         });
     };
 
@@ -110,10 +183,66 @@ const SignInScreen = ({ navigation }) => {
                 style={styles.footer}
             >
                 <ScrollView>
-                    <Text style={styles.text_footer}>email</Text>
+                <Text style={styles.text_footer}>Shop's name</Text>
+                <View style={styles.action}>
+                    <FontAwesome
+                        name="shopping-cart"
+                        color="#05375a"
+                        size={20}
+                    />
+                    <TextInput
+                        placeholder="Your shop's name"
+                        style={styles.textInput}
+                        autoCapitalize="none"
+                        onChangeText={(val) => shopnameInputChange(val)}
+                    />
+                    {data.check_shopnameInputChage ?
+                        <Animatable.View
+                            animation="bounceIn"
+                        >
+                            <Feather
+                                name="check-circle"
+                                color="green"
+                                size={20}
+                            />
+                        </Animatable.View>
+                        : null}
+                </View>
+
+                <Text style={[styles.text_footer, {
+                    marginTop: 35
+                }]}>Owner's name</Text>
                     <View style={styles.action}>
                         <FontAwesome
                             name="user-o"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder="Owner's name"
+                            style={styles.textInput}
+                            autoCapitalize="none"
+                            onChangeText={(val) => ownernameInputChange(val)}
+                        />
+                        {data.check_owenernameInputChange ?
+                            <Animatable.View
+                                animation="bounceIn"
+                            >
+                                <Feather
+                                    name="check-circle"
+                                    color="green"
+                                    size={20}
+                                />
+                            </Animatable.View>
+                            : null}
+                    </View>
+
+                <Text style={[styles.text_footer, {
+                    marginTop: 35
+                }]}>Email</Text>
+                    <View style={styles.action}>
+                        <FontAwesome
+                            name="mail-reply"
                             color="#05375a"
                             size={20}
                         />
@@ -124,6 +253,34 @@ const SignInScreen = ({ navigation }) => {
                             onChangeText={(val) => textInputChange(val)}
                         />
                         {data.check_textInputChange ?
+                            <Animatable.View
+                                animation="bounceIn"
+                            >
+                                <Feather
+                                    name="check-circle"
+                                    color="green"
+                                    size={20}
+                                />
+                            </Animatable.View>
+                            : null}
+                    </View>
+
+                    <Text style={[styles.text_footer, {
+                        marginTop: 35
+                    }]}>Mobile number</Text>
+                    <View style={styles.action}>
+                        <FontAwesome
+                            name="mobile"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder="Your mobile number"
+                            style={styles.textInput}
+                            autoCapitalize="none"
+                            onChangeText={(val) => mobileInputChange(val)}
+                        />
+                        {data.check_mobileInputChange ?
                             <Animatable.View
                                 animation="bounceIn"
                             >

@@ -3,3 +3,9 @@
 2020.05.24 02:24:55 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
 May 24, 2020 3:48:27 AM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
 INFO: Unsupported notification method: $/setTraceNotification
+2020.05.26 01:04:42 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
+2020.05.26 01:04:44 INFO  time: initialize in 2.14s
+2020.05.26 01:04:55 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2020.05.27 00:13:57 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
+2020.05.27 00:14:00 INFO  time: initialize in 3.36s
+2020.05.27 00:14:15 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 

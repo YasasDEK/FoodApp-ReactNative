@@ -18,6 +18,7 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 
 const HomeStack = createStackNavigator();
 const DetailsStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const MainTabScreen = ({navigation}) => (
@@ -57,7 +58,7 @@ const MainTabScreen = ({navigation}) => (
     />
     <Tab.Screen
       name="Profile"
-      component={ProfileScreen}
+      component={ProfileStackScreen}
       options={{
         tabBarLabel: 'Profile',
         tabBarColor: '#009387',
@@ -125,4 +126,32 @@ const DetailsStackScreen = ({navigation}) => (
       }}
     />
   </DetailsStack.Navigator>
+);
+
+const ProfileStackScreen = ({navigation}) => (
+  <ProfileStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#009387',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}>
+    <ProfileStack.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={{
+        headerLeft: () => (
+          <Icon.Button
+            name="ios-menu"
+            size={25}
+            backgroundColor="#009387"
+            onPress={() => navigation.openDrawer()}
+          />
+        ),
+      }}
+    />
+  </ProfileStack.Navigator>
 );

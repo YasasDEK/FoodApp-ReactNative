@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     TextInput,
     Platform,
-    StyleSheet ,
+    StyleSheet,
     StatusBar,
     Alert,
 } from 'react-native';
@@ -19,6 +19,7 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+import { AsyncStorage } from '@react-native-community/async-storage';
 
 import { useTheme } from 'react-native-paper';
 
@@ -26,7 +27,7 @@ import { AuthContext } from '../components/context';
 
 import Users from '../model/users';
 
-const SignInScreen = ({navigation}) => {
+const SignInScreen = ({ navigation }) => {
 
     const [data, setData] = React.useState({
         email: '',
@@ -42,7 +43,7 @@ const SignInScreen = ({navigation}) => {
     const { signIn } = React.useContext(AuthContext);
 
     const textInputChange = (val) => {
-        if ( val.trim().length >= 4 ) {
+        if (val.trim().length >= 4) {
             setData({
                 ...data,
                 email: val,
@@ -60,7 +61,7 @@ const SignInScreen = ({navigation}) => {
     };
 
     const handlePasswordChange = (val) => {
-        if ( val.trim().length >= 8 ) {
+        if (val.trim().length >= 8) {
             setData({
                 ...data,
                 password: val,
@@ -83,7 +84,7 @@ const SignInScreen = ({navigation}) => {
     };
 
     const handleValidUser = (val) => {
-        if ( val.trim().length >= 4 ) {
+        if (val.trim().length >= 4) {
             setData({
                 ...data,
                 isValidUser: true,
@@ -97,158 +98,159 @@ const SignInScreen = ({navigation}) => {
     };
 
     const loginHandle = (email, password) => {
-       if (email === '' && password === '') {
-        console.log(email, password);
+        if (email === '' && password === '') {
+            console.log(email, password);
             Alert.alert('Empty input!');
         } else if (email === '' || password === '') {
             Alert.alert('Empty input!');
         } else {
-        firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
-            if (result.user.emailVerified === true) {
-                console.log('Done');
-                        const foundUser = Users.filter( item => {
-                        return email && password;
-                        } );
+            firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
+                if (result.user.emailVerified === true) {
+                    const foundUser = email;
+                    if (result.user.displayName === 'shop') {
                         signIn(foundUser);
-            } else {
-                console.log('error');
-                Alert.alert('Verify your email first!');
-            }
-        }).catch((error) => {
-            Alert.alert(error.message);
+                    } else {
+                        Alert.alert('Invalid login');
+                    }
+                } else {
+                    console.log('error');
+                    Alert.alert('Verify your email first!');
+                }
+            }).catch((error) => {
+                Alert.alert(error.message);
             });
         }
     };
 
     const forgetpasswordHandle = (email) => {
         firebase.auth().sendPasswordResetEmail(email).then(() => {
-            Alert.alert('Rest you password using email!');
+            Alert.alert('Rest your password using email!');
         }).catch((error) => {
             Alert.alert(error.message);
         });
     };
 
     return (
-      <View style={styles.container}>
-          <StatusBar backgroundColor='#009387' barStyle="light-content"/>
-        <View style={styles.header}>
-            <Text style={styles.text_header}>Welcome!</Text>
+        <View style={styles.container}>
+            <StatusBar backgroundColor='#009387' barStyle="light-content" />
+            <View style={styles.header}>
+                <Text style={styles.text_header}>Welcome!</Text>
+            </View>
+            <Animatable.View
+                animation="fadeInUpBig"
+                style={[styles.footer, {
+                    backgroundColor: colors.background
+                }]}
+            >
+                <Text style={[styles.text_footer, {
+                    color: colors.text
+                }]}>email</Text>
+                <View style={styles.action}>
+                    <FontAwesome
+                        name="user-o"
+                        color={colors.text}
+                        size={20}
+                    />
+                    <TextInput
+                        placeholder="Your email"
+                        placeholderTextColor="#666666"
+                        style={[styles.textInput, {
+                            color: colors.text
+                        }]}
+                        autoCapitalize="none"
+                        onChangeText={(val) => textInputChange(val)}
+                        onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
+                    />
+                    {data.check_textInputChange ?
+                        <Animatable.View
+                            animation="bounceIn"
+                        >
+                            <Feather
+                                name="check-circle"
+                                color="green"
+                                size={20}
+                            />
+                        </Animatable.View>
+                        : null}
+                </View>
+                {data.isValidUser ? null :
+                    <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={styles.errorMsg}>email must be 4 characters long.</Text>
+                    </Animatable.View>
+                }
+
+
+                <Text style={[styles.text_footer, {
+                    color: colors.text,
+                    marginTop: 35
+                }]}>Password</Text>
+                <View style={styles.action}>
+                    <Feather
+                        name="lock"
+                        color={colors.text}
+                        size={20}
+                    />
+                    <TextInput
+                        placeholder="Your Password"
+                        placeholderTextColor="#666666"
+                        secureTextEntry={data.secureTextEntry ? true : false}
+                        style={[styles.textInput, {
+                            color: colors.text
+                        }]}
+                        autoCapitalize="none"
+                        onChangeText={(val) => handlePasswordChange(val)}
+                    />
+                    <TouchableOpacity
+                        onPress={updateSecureTextEntry}
+                    >
+                        {data.secureTextEntry ?
+                            <Feather
+                                name="eye-off"
+                                color="grey"
+                                size={20}
+                            />
+                            :
+                            <Feather
+                                name="eye"
+                                color="grey"
+                                size={20}
+                            />
+                        }
+                    </TouchableOpacity>
+                </View>
+                {data.isValidPassword ? null :
+                    <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={styles.errorMsg}>Password must be 8 characters long.</Text>
+                    </Animatable.View>
+                }
+
+
+                <TouchableOpacity
+                    style={styles.signIn}
+                    onPress={() => { forgetpasswordHandle(data.email); }}>
+                    <Text style={{ color: '#009387', marginTop: 15 }}>Forgot password?</Text>
+                </TouchableOpacity>
+                <View style={styles.button}>
+                    <TouchableOpacity
+                        style={styles.signIn}
+                        onPress={() => { loginHandle(data.email, data.password); }}
+                    >
+                        <LinearGradient
+                            colors={['#08d4c4', '#01ab9d']}
+                            style={styles.signIn}
+                        >
+                            <Text style={[styles.textSign, { color: '#fff' }]}>Sign In</Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('SignUpScreen')}
+                        style={[styles.signIn, { borderColor: '#009387', borderWidth: 1, marginTop: 15 }]}>
+                        <Text style={[styles.textSign, { color: '#009387' }]}>Sign Up</Text>
+                    </TouchableOpacity>
+                </View>
+            </Animatable.View>
         </View>
-        <Animatable.View
-            animation="fadeInUpBig"
-            style={[styles.footer, {
-                backgroundColor: colors.background
-            }]}
-        >
-            <Text style={[styles.text_footer, {
-                color: colors.text
-            }]}>email</Text>
-            <View style={styles.action}>
-                <FontAwesome
-                    name="user-o"
-                    color={colors.text}
-                    size={20}
-                />
-                <TextInput
-                    placeholder="Your email"
-                    placeholderTextColor="#666666"
-                    style={[styles.textInput, {
-                        color: colors.text
-                    }]}
-                    autoCapitalize="none"
-                    onChangeText={(val) => textInputChange(val)}
-                    onEndEditing={(e)=>handleValidUser(e.nativeEvent.text)}
-                />
-                {data.check_textInputChange ?
-                <Animatable.View
-                    animation="bounceIn"
-                >
-                    <Feather
-                        name="check-circle"
-                        color="green"
-                        size={20}
-                    />
-                </Animatable.View>
-                : null}
-            </View>
-            { data.isValidUser ? null :
-            <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMsg}>email must be 4 characters long.</Text>
-            </Animatable.View>
-            }
-
-
-            <Text style={[styles.text_footer, {
-                color: colors.text,
-                marginTop: 35
-            }]}>Password</Text>
-            <View style={styles.action}>
-                <Feather
-                    name="lock"
-                    color={colors.text}
-                    size={20}
-                />
-                <TextInput
-                    placeholder="Your Password"
-                    placeholderTextColor="#666666"
-                    secureTextEntry={data.secureTextEntry ? true : false}
-                    style={[styles.textInput, {
-                        color: colors.text
-                    }]}
-                    autoCapitalize="none"
-                    onChangeText={(val) => handlePasswordChange(val)}
-                />
-                <TouchableOpacity
-                    onPress={updateSecureTextEntry}
-                >
-                    {data.secureTextEntry ?
-                    <Feather
-                        name="eye-off"
-                        color="grey"
-                        size={20}
-                    />
-                    :
-                    <Feather
-                        name="eye"
-                        color="grey"
-                        size={20}
-                    />
-                    }
-                </TouchableOpacity>
-            </View>
-            { data.isValidPassword ? null :
-            <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMsg}>Password must be 8 characters long.</Text>
-            </Animatable.View>
-            }
-
-
-            <TouchableOpacity 
-            style={styles.signIn}
-            onPress={() => {forgetpasswordHandle( data.email );}}>
-                <Text style={{color:'#009387', marginTop:15}}>Forgot password?</Text>
-            </TouchableOpacity>
-            <View style={styles.button}>
-                <TouchableOpacity
-                    style={styles.signIn}
-                    onPress={() => {loginHandle( data.email, data.password );}}
-                >
-                <LinearGradient
-                    colors={['#08d4c4', '#01ab9d']}
-                    style={styles.signIn}
-                >
-                    <Text style={[styles.textSign, { color: '#fff'}]}>Sign In</Text>
-                </LinearGradient>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('SignUpScreen')}
-                    style={[styles.signIn, {borderColor : '#009387', borderWidth: 1, marginTop: 15}]}>
-                    <Text style={[styles.textSign, {color: '#009387'}]}>Sign Up</Text>
-                </TouchableOpacity>
-            </View>
-        </Animatable.View>
-      </View>
     );
 };
 
@@ -256,8 +258,8 @@ export default SignInScreen;
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#009387'
+        flex: 1,
+        backgroundColor: '#009387'
     },
     header: {
         flex: 1,
@@ -321,4 +323,4 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold'
     }
-  });
+});
