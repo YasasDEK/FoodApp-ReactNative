@@ -25,8 +25,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 // import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTheme } from 'react-native-paper';
 
 const SignInScreen = ({ navigation }) => {
+
+    const { colors } = useTheme();
 
     const [data, setData] = React.useState({
         email: '',
@@ -50,6 +53,8 @@ const SignInScreen = ({ navigation }) => {
             Alert.alert('Empty input!');
         } else if (email === '' || password === '') {
             Alert.alert('Empty input!');
+        } else if (data.check_mobileInputChange === false) {
+            Alert.alert('Error in inputs');
         } else if (data.password !== data.confirm_password) {
             Alert.alert('Password and the confim password does not match!');
         }

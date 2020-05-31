@@ -9,3 +9,15 @@ INFO: Unsupported notification method: $/setTraceNotification
 2020.05.27 00:13:57 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
 2020.05.27 00:14:00 INFO  time: initialize in 3.36s
 2020.05.27 00:14:15 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2020.05.27 03:12:08 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
+2020.05.27 03:12:16 INFO  time: initialize in 8.47s
+2020.05.27 03:12:46 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2020.05.28 01:02:49 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
+2020.05.28 01:02:50 INFO  time: initialize in 1.62s
+2020.05.28 01:03:00 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2020.05.29 22:38:23 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
+2020.05.29 22:38:25 INFO  time: initialize in 1.8s
+2020.05.29 22:38:38 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2020.05.31 01:04:54 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
+2020.05.31 01:04:57 INFO  time: initialize in 3.45s
+2020.05.31 01:05:15 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 

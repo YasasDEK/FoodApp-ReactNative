@@ -6,6 +6,10 @@ import React from 'react';
 import firebase from '@react-native-firebase/app';
 import Auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import FoodImagePicker from './FoodImagePicker';
+// import { withFormik } from 'formik';
+import { v4 as uuidv4 } from 'uuid';
 import {
   View,
   Text,
@@ -25,30 +29,100 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 // import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTheme } from 'react-native-paper';
 
-const SignInScreen = ({ navigation }) => {
+const SignInScreen = (props, { navigation }) => {
+
+  const { colors } = useTheme();
 
   const [data, setData] = React.useState({
     foodname: '',
+    imageuri: '',
+    image: '',
+    price: '',
     ingredients: '',
     tagname: '',
     check_foodname: false,
     check_ingredients: false,
     check_tagname: false,
+    check_price: false,
     secureTextEntry: true,
     confirm_secureTextEntry: true,
   });
 
-  const addFoodHandle = (foodname, ingredients, tagname) => {
+  const addFoodHandle = (foodname, ingredients, tagname, price) => {
+    if (foodname === '' || ingredients === '' || tagname === '' || price === '') {
+      Alert.alert('Error in inputs');
+    } else if (data.check_price === false) {
+      Alert.alert('Error in inputs');
+    }
+    else if (foodname === '' && ingredients === '' && tagname === '' && price === '') {
+      Alert.alert('Error in inputs');
+    } else {
+      console.log(data.imageuri);
+      if (data.imageuri) {
+        const fileExtension = data.imageuri.split('.').pop();
+        console.log('EXT: ' + fileExtension);
+        var uuid = uuidv4();
+
+        const fileName = `${uuid}.${fileExtension}`;
+        console.log(fileName);
+
+        var storageRef = firebase.storage().ref(`foods/images/${fileName}`);
+
+        storageRef.putFile(data.imageuri)
+          .on(
+            firebase.storage.TaskEvent.STATE_CHANGED,
+            snapshot => {
+              console.log('snapshot: ' + snapshot.state);
+              console.log('progress: ' + (snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+
+              if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
+                console.log('Success');
+              }
+            },
+            error => {
+              // unsubscribe();
+              console.log('image upload error: ' + error.toString());
+            },
+            () => {
+              storageRef.getDownloadURL()
+              .then((downloadurl) => {
+                console.log("File available at: " + downloadurl);
+                setData({
+                  ...data,
+                  imageuri: downloadurl,
+                });
+              });
+            }
+
+          );
+
         var user = firebase.auth().currentUser;
-        console.log(user);
+        console.log(user.email);
         firebase.firestore().collection('foods').add({
           type: 'shop',
+          price: data.price,
           foodname: data.foodname,
           ingredients: data.ingredients,
           tagname: data.tagname,
-          shopemail: user,
+          shopemail: user.email,
+          imageuri: data.imageuri
         });
+        Alert.alert('New food added successfully');
+      } else {
+        Alert.alert('You must upload an image of this food');
+      }
+    }
+  };
+
+  const setFoodImage = (image) => {
+    setData({
+      ...data,
+      imageuri: image.uri,
+    });
+    console.log('image uri = ' + image.uri);
+    console.log('data.imageuri = ' + data.imageuri);
   };
 
   const foodnameInputChange = (val) => {
@@ -79,6 +153,22 @@ const SignInScreen = ({ navigation }) => {
         ...data,
         ingredients: val,
         check_ingredients: false
+      });
+    }
+  };
+
+  const priceInputChange = (val) => {
+    if (val.length !== 0 && isNaN(val) === false) {
+      setData({
+        ...data,
+        price: val,
+        check_price: true
+      });
+    } else {
+      setData({
+        ...data,
+        price: val,
+        check_price: false
       });
     }
   };
@@ -121,19 +211,26 @@ const SignInScreen = ({ navigation }) => {
       </View>
       <Animatable.View
         animation="fadeInUpBig"
-        style={styles.footer}
+        style={[styles.footer, {
+          backgroundColor: colors.background
+        }]}
       >
         <ScrollView>
-          <Text style={styles.text_footer}>Name of the food</Text>
+          <Text style={[styles.text_footer, {
+            color: colors.text,
+          }]}>Name of the food</Text>
           <View style={styles.action}>
             <FontAwesome
               name="shopping-cart"
-              color="#05375a"
+              color={colors.text}
               size={20}
             />
             <TextInput
               placeholder="Ex: pizza"
-              style={styles.textInput}
+              placeholderTextColor="#666666"
+              style={[styles.textInput, {
+                color: colors.text
+            }]}
               autoCapitalize="none"
               onChangeText={(val) => foodnameInputChange(val)}
             />
@@ -151,21 +248,57 @@ const SignInScreen = ({ navigation }) => {
           </View>
 
           <Text style={[styles.text_footer, {
-            marginTop: 35
+            marginTop: 35,
+            color: colors.text
           }]}>Ingredients</Text>
           <View style={styles.action}>
             <FontAwesome
               name="user-o"
-              color="#05375a"
+              color={colors.text}
               size={20}
             />
             <TextInput
               placeholder="Ex: flour, oil, salt etc "
-              style={styles.textInput}
+              placeholderTextColor="#666666"
+              style={[styles.textInput, {
+                color: colors.text
+            }]}
               autoCapitalize="none"
               onChangeText={(val) => ingredientsInputChange(val)}
             />
             {data.check_ingredients ?
+              <Animatable.View
+                animation="bounceIn"
+              >
+                <Feather
+                  name="check-circle"
+                  color={'green'}
+                  size={20}
+                />
+              </Animatable.View>
+              : null}
+          </View>
+
+          <Text style={[styles.text_footer, {
+            color: colors.text,
+            marginTop: 35
+          }]}>Price (LKR)</Text>
+          <View style={styles.action}>
+            <FontAwesome
+              name="database"
+              color={colors.text}
+              size={20}
+            />
+            <TextInput
+              placeholder="Ex: flour, oil, salt etc "
+              placeholderTextColor="#666666"
+              style={[styles.textInput, {
+                color: colors.text
+            }]}
+              autoCapitalize="none"
+              onChangeText={(val) => priceInputChange(val)}
+            />
+            {data.check_price ?
               <Animatable.View
                 animation="bounceIn"
               >
@@ -179,17 +312,21 @@ const SignInScreen = ({ navigation }) => {
           </View>
 
           <Text style={[styles.text_footer, {
+            color: colors.text,
             marginTop: 35
           }]}>Tag name</Text>
           <View style={styles.action}>
             <FontAwesome
               name="mail-reply"
-              color="#05375a"
+              color={colors.text}
               size={20}
             />
             <TextInput
               placeholder="Ex: pizza"
-              style={styles.textInput}
+              placeholderTextColor="#666666"
+              style={[styles.textInput, {
+                color: colors.text
+            }]}
               autoCapitalize="none"
               onChangeText={(val) => tagnameInputChange(val)}
             />
@@ -205,10 +342,19 @@ const SignInScreen = ({ navigation }) => {
               </Animatable.View>
               : null}
           </View>
+
+          <Text style={[styles.text_footer, {
+            color: colors.text,
+            marginTop: 35
+          }]}>Add image</Text>
+
+          {/*for image*/}
+          <FoodImagePicker image={data.image} onImagePicked={setFoodImage} />
+
           <View style={styles.button}>
             <TouchableOpacity
               style={styles.signIn}
-              onPress={() => { addFoodHandle(data.foodname, data.ingredients, data.tagname); }}
+              onPress={() => { addFoodHandle(data.foodname, data.ingredients, data.tagname, data.price); }}
             >
               <LinearGradient
                 colors={['#08d4c4', '#01ab9d']}
@@ -292,3 +438,5 @@ const styles = StyleSheet.create({
     color: 'grey'
   }
 });
+
+
