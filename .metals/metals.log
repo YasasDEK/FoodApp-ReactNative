@@ -21,3 +21,14 @@ INFO: Unsupported notification method: $/setTraceNotification
 2020.05.31 01:04:54 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
 2020.05.31 01:04:57 INFO  time: initialize in 3.45s
 2020.05.31 01:05:15 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2020.06.09 16:28:39 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
+2020.06.09 16:28:41 INFO  time: initialize in 1.86s
+2020.06.09 16:28:51 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2020.06.10 01:38:45 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
+2020.06.10 01:38:46 INFO  time: initialize in 1.93s
+2020.06.10 01:38:57 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+Jun 10, 2020 3:16:14 AM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTraceNotification
+2020.06.12 16:15:24 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
+2020.06.12 16:15:29 INFO  time: initialize in 5.27s
+2020.06.12 16:15:49 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 

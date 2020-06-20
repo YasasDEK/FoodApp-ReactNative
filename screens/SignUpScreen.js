@@ -60,11 +60,12 @@ const SignInScreen = ({ navigation }) => {
         }
         else {
             firebase.auth().createUserWithEmailAndPassword(email, password).then((result) => {
+                console.log('asd ' + result.user.uid);
                 var user = firebase.auth().currentUser;
 
                 result.user.updateProfile({displayName: 'shop'});
 
-                firebase.firestore().collection('shops').add({
+                firebase.firestore().collection('shops').doc(result.user.uid).set({
                     type: 'shop',
                     shopname: data.shopname,
                     ownername: data.ownername,
@@ -72,6 +73,8 @@ const SignInScreen = ({ navigation }) => {
                     shopemail: data.email,
                     uid: result.user.uid,
                 });
+                console.log(user.uid);
+                // console.log()
 
                 user.sendEmailVerification().then(() => {
                     Alert.alert('Verification Email sent. Please verify your email!');

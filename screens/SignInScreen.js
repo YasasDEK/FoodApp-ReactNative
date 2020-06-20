@@ -107,6 +107,7 @@ const SignInScreen = ({ navigation }) => {
             firebase.auth().signInWithEmailAndPassword(email, password).then((result) => {
                 if (result.user.emailVerified === true) {
                     const foundUser = email;
+                    // const identify = 'shop';
                     if (result.user.displayName === 'shop') {
                         signIn(foundUser);
                     } else {
