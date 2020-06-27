@@ -10,12 +10,12 @@ import React from 'react';
 import {View, Text, Button} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import AllFoodScreen from './AllFoodScreen';
-import AllShopScreen from './AllShopScreen';
+import shoppingCartScreen from './shoppingCartScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 
 const AllFoodStack = createStackNavigator();
-const AllShopStack = createStackNavigator();
+const shoppingCartStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const CustomerMainTabScreen = ({navigation}) => (
@@ -26,19 +26,20 @@ const CustomerMainTabScreen = ({navigation}) => (
       options={{
         tabBarLabel: 'All foods',
         tabBarColor: '#009387',
+        // tabBarColor: '#009387',
         tabBarIcon: ({color}) => (
-          <Icon name="ios-home" color={color} size={26} />
+          <Icon name="md-restaurant" color={color} size={26} />
         ),
       }}
     />
     <Tab.Screen
-      name="All shops"
-      component={AllShopStackScreen}
+      name="Cart"
+      component={shoppingCartStackScreen}
       options={{
-        tabBarLabel: 'All shops',
-        tabBarColor: '#009386',
+        tabBarLabel: 'Cart',
+        // tabBarColor: '#009386',
         tabBarIcon: ({color}) => (
-          <Icon name="ios-restaurant" color={color} size={26} />
+          <Icon name="ios-cart" color={color} size={26} />
         ),
       }}
     />
@@ -75,8 +76,8 @@ const AllFoodStackScreen = ({navigation}) => (
   </AllFoodStack.Navigator>
 );
 
-const AllShopStackScreen = ({navigation}) => (
-  <AllShopStack.Navigator
+const shoppingCartStackScreen = ({navigation}) => (
+  <shoppingCartStack.Navigator
     screenOptions={{
       headerStyle: {
         backgroundColor: '#009387',
@@ -86,9 +87,9 @@ const AllShopStackScreen = ({navigation}) => (
         fontWeight: 'bold',
       },
     }}>
-    <AllShopStack.Screen
+    <shoppingCartStack.Screen
       name="All Shop"
-      component={AllShopScreen}
+      component={shoppingCartScreen}
       options={{
         headerLeft: () => (
           <Icon.Button
@@ -100,5 +101,5 @@ const AllShopStackScreen = ({navigation}) => (
         ),
       }}
     />
-  </AllShopStack.Navigator>
+  </shoppingCartStack.Navigator>
 );

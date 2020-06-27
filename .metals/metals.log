@@ -32,3 +32,12 @@ INFO: Unsupported notification method: $/setTraceNotification
 2020.06.12 16:15:24 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
 2020.06.12 16:15:29 INFO  time: initialize in 5.27s
 2020.06.12 16:15:49 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2020.06.23 18:01:29 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
+2020.06.23 18:01:31 INFO  time: initialize in 1.74s
+2020.06.23 18:01:46 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2020.06.27 17:56:20 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
+2020.06.27 17:56:25 INFO  time: initialize in 5.16s
+2020.06.27 17:56:46 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2020.06.27 20:14:46 INFO  started: Metals version 0.9.0 in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'
+2020.06.27 20:14:47 INFO  time: initialize in 1.54s
+2020.06.27 20:14:55 WARN  no build tool detected in workspace 'C:\Users\hp.DESKTOP-OU243N9\Desktop\FoodApp'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 

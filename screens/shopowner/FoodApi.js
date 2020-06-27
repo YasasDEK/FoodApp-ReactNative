@@ -41,3 +41,23 @@ export async function getShop(shopsRetreived) {
     });
   shopList = [];
 }
+
+export async function getFoodsforCustomer(foodsRetreived) {
+  var foodList = [];
+  var user = firebase.auth().currentUser;
+  await firebase
+    .firestore()
+    .collection('foods')
+    .onSnapshot(querySnapshot => {
+      querySnapshot.forEach(documentSnapshot => {
+        const foodItem = documentSnapshot.data();
+        foodItem.id = documentSnapshot.id;
+        if (!foodList.includes(foodItem)) {
+          foodList.push(foodItem);
+        }
+      });
+      foodsRetreived(foodList);
+      foodList = [];
+    });
+  foodList = [];
+}

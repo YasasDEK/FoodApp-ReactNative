@@ -90,6 +90,8 @@ const AddFoodScreen = (props, { navigation }) => {
               .then((downloadurl) => {
                 console.log('File available at: ' + downloadurl);
                 var user = firebase.auth().currentUser;
+                var x = firebase.firestore().collection('shops').where('shopemail', '==' , user.email).get();
+                console.log(x);
                 console.log(user.email);
                 firebase.firestore().collection('foods').add({
                   type: 'shop',
@@ -98,7 +100,8 @@ const AddFoodScreen = (props, { navigation }) => {
                   ingredients: data.ingredients,
                   tagname: data.tagname,
                   shopemail: user.email,
-                  imageuri: downloadurl
+                  imageuri: downloadurl,
+                  // shopname: x.shopname,
                 });
                 Alert.alert('New food added successfully');
               });

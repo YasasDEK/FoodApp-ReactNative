@@ -32,7 +32,7 @@ import AboutUsScreen from './screens/AboutUsScreen';
 import CompletedOrders from './screens/shopowner/CompletedOrders';
 import SupportScreen from './screens/shopowner/SupportScreen';
 import AllFoodScreenc from './screens/customer/AllFoodScreen';
-import AllShopScreen from './screens/customer/AllShopScreen';
+import shoppingCartScreen from './screens/customer/shoppingCartScreen';
 import EditProfileScreen from './screens/shopowner/EditProfileScreen';
 import {CustomerDrawerContent} from './screens/customer/CustomerDrawerContent';
 import MyOrders from './screens/customer/MyOrders';
