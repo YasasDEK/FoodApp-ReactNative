@@ -86,6 +86,6 @@ export async function cancelOrder() {
   orderList = [];
 }
 
-export async function removeFromCart() {
-  orderList.splice(x, 1);
-}
+// export async function removeFromCart() {
+//   orderList.splice(x, 1);
+// }
