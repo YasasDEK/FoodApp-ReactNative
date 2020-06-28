@@ -10,11 +10,13 @@ import {
   Image,
   IconButton,
 } from 'react-native';
-import {getFoodsforCustomer} from '../shopowner/FoodApi';
+import {getFoodsforCustomer, addToCart} from '../shopowner/FoodApi';
 import {ListItem, Divider} from 'react-native-elements';
 import {SearchBar} from 'react-native-elements';
 import {add} from 'react-native-reanimated';
 // import ActionButton from 'react-native-action-button';
+// export var orederList = [];
+export var count = 0;
 
 class AllFoodScreen extends Component {
   constructor(props, context) {
@@ -55,6 +57,12 @@ class AllFoodScreen extends Component {
     getFoodsforCustomer(this.onFoodsReceived);
   }
 
+  // addToCart(price, foodname) {
+  //   var details = {foodname: foodname, price: price};
+  //   orederList.push(details);
+  //   console.log(orederList);
+  // }
+
   // getTotal = price => {
   //   this.setState(prevState => ({
   //     total: (prevState.total = price + 1),
@@ -62,6 +70,7 @@ class AllFoodScreen extends Component {
   // };
 
   render() {
+    // const [count, setCount] = useState(0);
     const {search} = this.state;
     return this.state.foodList.length > 0 ? (
       <SafeAreaView style={styles.container}>
@@ -99,9 +108,9 @@ class AllFoodScreen extends Component {
                   <Button
                     color="#009387"
                     title="Add to Cart"
-                    // onPress={() => {
-                    //   this.getTotal(`${item.price}`);
-                    // }}
+                    onPress={() => {
+                      addToCart(`${item.price}`, `${item.foodname}`);
+                    }}
                   />
                 </View>
                 {/*<IconButton icon="account-edit" color="#009387" size={40} />*/}

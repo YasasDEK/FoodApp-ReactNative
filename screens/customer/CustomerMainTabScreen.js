@@ -37,7 +37,7 @@ const CustomerMainTabScreen = ({navigation}) => (
       component={shoppingCartStackScreen}
       options={{
         tabBarLabel: 'Cart',
-        // tabBarColor: '#009386',
+        tabBarColor: '#009386',
         tabBarIcon: ({color}) => (
           <Icon name="ios-cart" color={color} size={26} />
         ),

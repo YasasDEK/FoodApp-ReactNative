@@ -1,4 +1,8 @@
 import firebase from '@react-native-firebase/app';
+// import AllFoodScreen from '../customer/AllFoodScreen';
+// import React, {Component, useState, useEffect} from 'react';
+// import { add, exp } from 'react-native-reanimated';
+var orderList = [];
 
 export async function getFoods(foodsRetreived) {
   var foodList = [];
@@ -60,4 +64,28 @@ export async function getFoodsforCustomer(foodsRetreived) {
       foodList = [];
     });
   foodList = [];
+}
+
+export var orderList = [];
+
+export async function addToCart(price, foodname) {
+  var details = {foodname: foodname, price: price};
+  orderList.push(details);
+  console.log(orderList);
+}
+
+export async function sendCart(cartItems) {
+  cartItems(orderList);
+}
+
+export async function sendCart2() {
+  console.log('hel');
+}
+
+export async function cancelOrder() {
+  orderList = [];
+}
+
+export async function removeFromCart() {
+  orderList.splice(x, 1);
 }
