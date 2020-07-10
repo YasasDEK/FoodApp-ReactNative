@@ -31,7 +31,7 @@ import CustomerMainTabScreen from './screens/customer/CustomerMainTabScreen';
 import AboutUsScreen from './screens/AboutUsScreen';
 import CompletedOrders from './screens/shopowner/CompletedOrders';
 import SupportScreen from './screens/shopowner/SupportScreen';
-import AllFoodScreenc from './screens/customer/AllFoodScreen';
+import AllFoodScreen from './screens/customer/AllFoodScreen';
 import shoppingCartScreen from './screens/customer/shoppingCartScreen';
 import EditProfileScreen from './screens/shopowner/EditProfileScreen';
 import {CustomerDrawerContent} from './screens/customer/CustomerDrawerContent';
@@ -39,6 +39,9 @@ import MyOrders from './screens/customer/MyOrders';
 import {AuthContext} from './components/context';
 import RootStackScreen from './screens/RootStackScreen';
 import AsyncStorage from '@react-native-community/async-storage';
+import EditFoodScreen from './screens/shopowner/EditFoodScreen';
+import DetailsScreen from './screens/shopowner/DetailsScreen';
+import ProfileScreen from './screens/shopowner/ProfileScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -140,7 +143,7 @@ const App = () => {
         } catch (e) {
           console.log(e);
         }
-        console.log('user token: ', userToken);
+        // console.log('user token: ', userToken);
         // var user = firebase.auth().currentUser;
         // console.log('displayname : ' + user.displayName);
         dispatch({type: 'LOGIN', token: userToken});
@@ -212,56 +215,93 @@ const App = () => {
     );
   }
   var user = firebase.auth().currentUser;
-  console.log('displayname : ' + user.displayName);
-  if (user.displayName === 'shop') {
+  if (user === null) {
     return (
       <PaperProvider theme={theme}>
         <AuthContext.Provider value={authContext}>
           <NavigationContainer theme={theme}>
-            {loginState.userToken !== null ? (
-              <Drawer.Navigator
-                drawerContent={props => <DrawerContent {...props} />}>
-                <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
-                <Drawer.Screen name="SupportScreen" component={SupportScreen} />
-                <Drawer.Screen name="AboutUsScreen" component={AboutUsScreen} />
-                <Drawer.Screen
-                  name="EditProfileScreen"
-                  component={EditProfileScreen}
-                />
-                <Drawer.Screen
-                  name="CompletedOrders"
-                  component={CompletedOrders}
-                />
-              </Drawer.Navigator>
-            ) : (
-              <RootStackScreen />
-            )}
+            <RootStackScreen />
           </NavigationContainer>
         </AuthContext.Provider>
       </PaperProvider>
     );
   } else {
-    return (
-      <PaperProvider theme={theme}>
-        <AuthContext.Provider value={authContext}>
-          <NavigationContainer theme={theme}>
-            {loginState.userToken !== null ? (
-              <Drawer.Navigator
-                drawerContent={props => <CustomerDrawerContent {...props} />}>
-                <Drawer.Screen
-                  name="CustomerHomeDrawer"
-                  component={CustomerMainTabScreen}
-                />
-                <Drawer.Screen name="MyOrders" component={MyOrders} />
-                <Drawer.Screen name="AboutUsScreen" component={AboutUsScreen} />
-              </Drawer.Navigator>
-            ) : (
-              <RootStackScreen />
-            )}
-          </NavigationContainer>
-        </AuthContext.Provider>
-      </PaperProvider>
-    );
+    // console.log('displayname : ' + user.displayName);
+    if (user.displayName === 'shop') {
+      return (
+        <PaperProvider theme={theme}>
+          <AuthContext.Provider value={authContext}>
+            <NavigationContainer theme={theme}>
+              {loginState.userToken !== null ? (
+                <Drawer.Navigator
+                  drawerContent={props => <DrawerContent {...props} />}>
+                  <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
+                  <Drawer.Screen
+                    name="SupportScreen"
+                    component={SupportScreen}
+                  />
+                  <Drawer.Screen
+                    name="AboutUsScreen"
+                    component={AboutUsScreen}
+                  />
+                  <Drawer.Screen
+                    name="DetailsScreen"
+                    component={DetailsScreen}
+                  />
+                  <Drawer.Screen
+                    name="ProfileScreen"
+                    component={ProfileScreen}
+                  />
+                  <Drawer.Screen
+                    name="EditFoodScreen"
+                    component={EditFoodScreen}
+                  />
+                  <Drawer.Screen
+                    name="EditProfileScreen"
+                    component={EditProfileScreen}
+                  />
+                  <Drawer.Screen
+                    name="CompletedOrders"
+                    component={CompletedOrders}
+                  />
+                </Drawer.Navigator>
+              ) : (
+                <RootStackScreen />
+              )}
+            </NavigationContainer>
+          </AuthContext.Provider>
+        </PaperProvider>
+      );
+    } else {
+      return (
+        <PaperProvider theme={theme}>
+          <AuthContext.Provider value={authContext}>
+            <NavigationContainer theme={theme}>
+              {loginState.userToken !== null ? (
+                <Drawer.Navigator
+                  drawerContent={props => <CustomerDrawerContent {...props} />}>
+                  <Drawer.Screen
+                    name="CustomerHomeDrawer"
+                    component={CustomerMainTabScreen}
+                  />
+                  <Drawer.Screen name="MyOrders" component={MyOrders} />
+                  <Drawer.Screen
+                    name="AboutUsScreen"
+                    component={AboutUsScreen}
+                  />
+                  <Drawer.Screen
+                    name="shoppingCartScreen"
+                    component={shoppingCartScreen}
+                  />
+                </Drawer.Navigator>
+              ) : (
+                <RootStackScreen />
+              )}
+            </NavigationContainer>
+          </AuthContext.Provider>
+        </PaperProvider>
+      );
+    }
   }
 };
 
