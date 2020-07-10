@@ -10,6 +10,10 @@ import {
 } from 'react-native';
 import {getFoods} from './FoodApi';
 import {ListItem, Divider} from 'react-native-elements';
+import {firebase} from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import {deletefood} from './FoodApi';
 // import ActionButton from 'react-native-action-button';
 
 class DetailsScreen extends Component {
@@ -24,17 +28,6 @@ class DetailsScreen extends Component {
     }));
     this.props.navigation.popToTop();
   };
-
-  // onFoodDeleted = () => {
-  //   var newFoodList = [...this.state.foodList];
-  //   newFoodList.splice(this.state.selectedIndex, 1);
-
-  //   this.setState(prevState => ({
-  //     foodList: (prevState.foodList = newFoodList),
-  //   }));
-
-  //   this.props.navigation.popToTop();
-  // };
 
   onFoodsReceived = foodList => {
     this.setState(prevState => ({
@@ -59,27 +52,42 @@ class DetailsScreen extends Component {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => {
             return (
-              <ListItem
-                containerStyle={styles.listItem}
-                title={item.foodname}
-                subtitle={`ingredients: ${item.ingredients}`}
-                titleStyle={styles.titleStyle}
-                subtitleStyle={styles.subtitleStyle}
-                leftAvatar={{
-                  size: 'large',
-                  rounded: false,
-                  source: {uri: item.imageuri},
-                }}
-                // onPress={() => {
-                //   this.setState(prevState => ({
-                //     selectedIndex: (prevState.selectedIndex = index),
-                //   }));
-                //   this.props.navigation.navigate('FoodDetail', {
-                //     food: item,
-                //     foodDeletedCallback: this.onFoodDeleted,
-                //   });
-                // }}
-              />
+              <View>
+                <ListItem
+                  containerStyle={styles.listItem}
+                  title={item.foodname}
+                  subtitle={`ingredients: ${item.ingredients}`}
+                  titleStyle={styles.titleStyle}
+                  subtitleStyle={styles.subtitleStyle}
+                  leftAvatar={{
+                    size: 'large',
+                    rounded: false,
+                    source: {uri: item.imageuri},
+                  }}
+                />
+                <View style={styles.buttonfield}>
+                  <View style={styles.button}>
+                    <Button
+                      color="#009387"
+                      title="  Edit food  "
+                      onPress={() =>
+                        this.props.navigation.navigate('EditFoodScreen', {
+                          foodid: item.foodid,
+                        })
+                      }
+                    />
+                  </View>
+                  <View style={styles.buttons}>
+                    <Button
+                      color="#d42828"
+                      title="Delete food"
+                      onPress={() => {
+                        deletefood(`${item.foodid}`);
+                      }}
+                    />
+                  </View>
+                </View>
+              </View>
             );
           }}
         />
@@ -123,5 +131,18 @@ const styles = StyleSheet.create({
   emptySubtitle: {
     fontSize: 18,
     fontStyle: 'italic',
+  },
+  button: {
+    marginLeft: 180,
+    // marginRight: 50,
+    marginBottom: 10,
+  },
+  buttons: {
+    marginLeft: 20,
+    marginRight: 100,
+    marginBottom: 10,
+  },
+  buttonfield: {
+    flexDirection: 'row',
   },
 });
