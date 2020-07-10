@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, Button, StyleSheet, StatusBar} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  StatusBar,
+  ImageBackground,
+} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 
 const HomeScreen = ({navigation}) => {
@@ -8,14 +15,10 @@ const HomeScreen = ({navigation}) => {
   const theme = useTheme();
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} />
-      <Text style={{color: colors.text}}>Home Screen</Text>
-      <Button
-        title="Go to details screen"
-        onPress={() => navigation.navigate('Details')}
-      />
-    </View>
+    <ImageBackground
+      source={require('../images/test.jpg')}
+      style={styles.image}
+    />
   );
 };
 
@@ -25,6 +28,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'cover',
     justifyContent: 'center',
   },
 });
