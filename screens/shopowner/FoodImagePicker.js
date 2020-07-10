@@ -1,64 +1,162 @@
-import React, {useState, useEffect} from 'react';
-import {View, Button, Image, StyleSheet, Text} from 'react-native';
-import ImagePicker from 'react-native-image-picker';
+/* eslint-disable no-unused-vars */
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow strict-local
+ */
+import React from 'react';
+import {View, Text, Button} from 'react-native';
+import {createStackNavigator} from '@react-navigation/stack';
+import DetailsScreen from './DetailsScreen';
+import HomeScreen from '../HomeScreen';
+import ProfileScreen from './ProfileScreen';
+import AddFoodScreen from './AddFoodScreen';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
+import EditFoodScreen from './EditFoodScreen';
+import EditProfileScreen from './EditProfileScreen';
 
-const FoodImagePick = ({image, onImagePicked}) => {
-  const [selectedImage, setSelectedImage] = useState();
+const HomeStack = createStackNavigator();
+const DetailsStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
+const EditFoodStack = createStackNavigator();
+const EditProfileStack = createStackNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
-  useEffect(() => {
-    if (image) {
-      console.log('useEffect: ' + image);
-      setSelectedImage({uri: image});
-    }
-  }, [image]);
+const MainTabScreen = ({navigation}) => (
+  <Tab.Navigator initialRouteName="Feed" activeColor="#ffffff">
+    <Tab.Screen
+      name="Home"
+      component={HomeStackScreen}
+      options={{
+        tabBarLabel: 'Home',
+        tabBarColor: '#009387',
+        tabBarIcon: ({color}) => (
+          <Icon name="ios-home" color={color} size={26} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Details"
+      component={DetailsStackScreen}
+      options={{
+        tabBarLabel: 'All Foods',
+        tabBarColor: '#009387',
+        tabBarIcon: ({color}) => (
+          <Icon name="ios-restaurant" color={color} size={26} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Add Food"
+      component={AddFoodScreen}
+      options={{
+        tabBarLabel: 'Add Food',
+        tabBarColor: '#009387',
+        tabBarIcon: ({color}) => (
+          <Icon name="ios-add-circle" color={color} size={26} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Profile"
+      component={ProfileStackScreen}
+      options={{
+        tabBarLabel: 'Profile',
+        tabBarColor: '#009387',
+        tabBarIcon: ({color}) => (
+          <Icon name="ios-person" color={color} size={26} />
+        ),
+      }}
+    />
+  </Tab.Navigator>
+);
 
-  const pickImageHandler = () => {
-    ImagePicker.showImagePicker(
-      {title: 'Pick an Image', maxWidth: 800, maxHeight: 600},
-      response => {
-        if (response.error) {
-          console.log('image error');
-        } else {
-          console.log('Image: ' + response.uri);
-          setSelectedImage({uri: response.uri});
-          onImagePicked({uri: response.uri});
-        }
+export default MainTabScreen;
+
+const HomeStackScreen = ({navigation}) => (
+  <HomeStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#009387',
       },
-    );
-  };
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}>
+    <HomeStack.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{
+        headerLeft: () => (
+          <Icon.Button
+            name="ios-menu"
+            size={25}
+            backgroundColor="#009387"
+            onPress={() => navigation.openDrawer()}
+          />
+        ),
+      }}
+    />
+  </HomeStack.Navigator>
+);
 
-  return (
-    <View style={styles.container}>
-      <Text style={[styles.text_footer, {marginTop: 35}]}>Add image</Text>
-      <View style={styles.imageContainer}>
-        <Image source={selectedImage} style={styles.previewImage} />
-      </View>
-      <View styels={styles.button}>
-        <Button title="Pick Image" onPress={pickImageHandler} />
-      </View>
-    </View>
-  );
-};
+const DetailsStackScreen = ({navigation}) => (
+  <DetailsStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#009387',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}>
+    <DetailsStack.Screen
+      name="Details"
+      component={DetailsScreen}
+      options={{
+        headerLeft: () => (
+          <Icon.Button
+            name="ios-menu"
+            size={25}
+            backgroundColor="#009387"
+            onPress={() => navigation.openDrawer()}
+          />
+        ),
+      }}
+    />
+  </DetailsStack.Navigator>
+);
 
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    alignItems: 'center',
-  },
-  imageContainer: {
-    borderWidth: 1,
-    borderColor: 'black',
-    backgroundColor: '#eee',
-    width: '80%',
-    height: 150,
-  },
-  button: {
-    margin: 8,
-  },
-  previewImage: {
-    width: '100%',
-    height: '100%',
-  },
-});
-
-export default FoodImagePick;
+const ProfileStackScreen = ({navigation}) => (
+  <ProfileStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#009387',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}>
+    <ProfileStack.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={{
+        headerLeft: () => (
+          <Icon.Button
+            name="ios-menu"
+            size={25}
+            backgroundColor="#009387"
+            onPress={() => navigation.openDrawer()}
+          />
+        ),
+      }}
+    />
+  </ProfileStack.Navigator>
+);
