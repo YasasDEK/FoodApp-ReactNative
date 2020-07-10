@@ -29,11 +29,12 @@ const NavScreen = ({navigation}) => {
           style={styles.logo}
           resizeMode="stretch"
         />
+        <Text style={styles.title2}>LAVA FOODS</Text>
       </View>
       <Animatable.View
         style={[styles.footer, {backgroundColor: '#fff'}]}
         animation="fadeInUpBig">
-        <Text style={styles.title}>Who are you?</Text>
+        <Text style={styles.title}>WHO ARE YOU?</Text>
         <View style={styles.button}>
           <TouchableOpacity
             onPress={() => navigation.navigate('MobileVeryScreen')}
@@ -134,5 +135,13 @@ const styles = StyleSheet.create({
   textSign: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  title2: {
+    color: 'white',
+    fontSize: 30,
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
   },
 });
