@@ -10,10 +10,12 @@ import {
   Image,
   IconButton,
 } from 'react-native';
-import {getFoodsforCustomer, addToCart} from '../shopowner/FoodApi';
+import {getFoodsforCustomer, addToCart, sendCart} from '../shopowner/FoodApi';
+// import {ModalTester} from './cartScreen';
 import {ListItem, Divider} from 'react-native-elements';
 import {SearchBar} from 'react-native-elements';
 import {add} from 'react-native-reanimated';
+// import SwipeUpDown from 'react-native-swipe-up-down';
 // import ActionButton from 'react-native-action-button';
 // export var orederList = [];
 export var count = 0;
@@ -57,28 +59,15 @@ class AllFoodScreen extends Component {
     getFoodsforCustomer(this.onFoodsReceived);
   }
 
-  // addToCart(price, foodname) {
-  //   var details = {foodname: foodname, price: price};
-  //   orederList.push(details);
-  //   console.log(orederList);
-  // }
-
-  // getTotal = price => {
-  //   this.setState(prevState => ({
-  //     total: (prevState.total = price + 1),
-  //   }));
-  // };
-
   render() {
-    // const [count, setCount] = useState(0);
     const {search} = this.state;
-    return this.state.foodList.length > 0 ? (
+    return this.state.foodList.length > 0 /*&& search === ''*/ ? (
       <SafeAreaView style={styles.container}>
-        <SearchBar
+        {/*<SearchBar
           placeholder="Type Here..."
           onChangeText={this.updateSearch}
           value={search}
-        />
+        />*/}
         <FlatList
           data={this.state.foodList}
           ItemSeparatorComponent={() => (
@@ -118,10 +107,29 @@ class AllFoodScreen extends Component {
             );
           }}
         />
+        <View style={styles.button1}>
+          <Button
+            color="#009387"
+            title="confirm order"
+            onPress={() => {
+              // sendCart();
+              // ModalTester();
+              console.log('test');
+              this.props.navigation.navigate('shoppingCartScreen', 'test');
+            }}
+          />
+        </View>
       </SafeAreaView>
     ) : (
-      <View style={styles.textContainer}>
-        <Text style={styles.emptyTitle}>No Foods found</Text>
+      <View>
+        <SearchBar
+          placeholder="Type Here..."
+          onChangeText={this.updateSearch}
+          value={search}
+        />
+        <View style={styles.textContainer}>
+          <Text style={styles.emptyTitle}>No Foods found</Text>
+        </View>
       </View>
     );
   }
@@ -151,6 +159,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 32,
     marginBottom: 16,
+    marginTop: 300,
   },
   emptySubtitle: {
     fontSize: 18,
@@ -161,8 +170,18 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginBottom: 10,
   },
+  button1: {
+    // marginLeft: 250,
+    // marginRight: 50,
+    // marginBottom: 10,
+    marginTop: 10,
+  },
   price: {
-    marginLeft: 260,
+    marginLeft: 250,
+    marginRight: 30,
     marginBottom: 10,
+  },
+  iconbutton: {
+    marginTop: 30,
   },
 });
