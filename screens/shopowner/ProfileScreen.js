@@ -7,29 +7,12 @@ import {
   FlatList,
   SafeAreaView,
   Text,
-  View,
-} from 'react-native';
-import {
-  useTheme,
   Avatar,
-  Title,
-  Caption,
-  Paragraph,
-  Drawer,
-  TouchableRipple,
-  TouchableOpacity,
-  IconButton,
-  Colors,
-  Switch,
-} from 'react-native-paper';
+  View,
+  ImageBackground,
+} from 'react-native';
+import {Title, Caption, IconButton} from 'react-native-paper';
 import {getShop} from './FoodApi';
-import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {AuthContext} from '../../components/context';
-import firebase from '@react-native-firebase/app';
-import Auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
 import {ListItem, Divider} from 'react-native-elements';
 
 class ProfileScreen extends Component {
@@ -37,10 +20,6 @@ class ProfileScreen extends Component {
     shopList: [],
     selectedIndex: 0,
   };
-
-  // FunctionToOpenSecondActivity = () => {
-  //   this.props.navigation.navigate('EditProfileScreen');
-  // };
 
   onshopsReceived = shopList => {
     this.setState(prevState => ({
@@ -55,61 +34,69 @@ class ProfileScreen extends Component {
   render() {
     return this.state.shopList.length > 0 ? (
       <SafeAreaView style={styles.container}>
-        <FlatList
-          data={this.state.shopList}
-          ItemSeparatorComponent={() => (
-            <Divider style={{backgroundColor: 'black'}} />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => {
-            return (
-              <View style={styles.userInfoSectiom}>
-                <View
-                  style={{
-                    marginLeft: 10,
-                    flexDirection: 'row',
-                    marginTop: 25,
-                  }}>
-                  <ListItem
-                    leftAvatar={{
-                      size: 100,
-                      rounded: true,
-                      source: {uri: item.imageuri},
-                    }}
-                  />
-                  <View style={{marginLeft: 15, flexDirection: 'column'}}>
-                    <Title style={styles.title}>{item.shopname}</Title>
-                    <Caption style={styles.caption}>@yasasdek</Caption>
-                    <Caption style={styles.caption}>User type : Shop</Caption>
+        <ImageBackground
+          source={require('../../images/profile.jpg')}
+          style={styles.image}>
+          <FlatList
+            data={this.state.shopList}
+            ItemSeparatorComponent={() => (
+              <Divider style={{backgroundColor: 'black'}} />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item, index}) => {
+              return (
+                <View style={styles.userInfoSectiom}>
+                  <View
+                    style={{
+                      marginLeft: 10,
+                      flexDirection: 'row',
+                      marginTop: 25,
+                    }}>
+                    <ListItem
+                      leftAvatar={{
+                        size: 100,
+                        marginLeft: 10,
+                        marginTop: 10,
+                        rounded: true,
+                        source: {uri: item.imageuri},
+                      }}
+                    />
+                    <View style={{marginLeft: 15, flexDirection: 'column'}}>
+                      <Title style={styles.title}>{item.shopname}</Title>
+                      <Caption style={styles.caption}>@yasasdek</Caption>
+                      <Caption style={styles.caption}>User type : Shop</Caption>
+                    </View>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.title2}>Owner</Text>
+                    <Caption style={styles.caption2}>{item.ownername}</Caption>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.title2}>Mobile</Text>
+                    <Caption style={styles.caption2}>{item.shopmobile}</Caption>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.title2}>Email</Text>
+                    <Caption style={styles.caption2}>{item.shopemail}</Caption>
+                  </View>
+                  <View style={styles.row1}>
+                    <IconButton
+                      style={styles.iconbutton}
+                      icon="account-edit"
+                      color="#009387"
+                      size={40}
+                      onPress={() =>
+                        this.props.navigation.navigate('EditProfileScreen', {
+                          shopemail: item.shopemail,
+                        })
+                      }
+                    />
                   </View>
                 </View>
-                <View style={styles.row}>
-                  <Text style={styles.title2}>Owner</Text>
-                  <Caption style={styles.caption2}>{item.ownername}</Caption>
-                </View>
-                <View style={styles.row}>
-                  <Text style={styles.title2}>Mobile</Text>
-                  <Caption style={styles.caption2}>{item.shopmobile}</Caption>
-                </View>
-                <View style={styles.row}>
-                  <Text style={styles.title2}>Email</Text>
-                  <Caption style={styles.caption2}>{item.shopemail}</Caption>
-                </View>
-                <View style={styles.row1}>
-                  <IconButton
-                    style={styles.iconbutton}
-                    icon="account-edit"
-                    color="#009387"
-                    size={40}
-                    onPress={() =>
-                      this.props.navigation.navigate('EditProfileScreen')
-                    }
-                  />
-                </View>
-              </View>
-            );
-          }}
-        />
+              );
+            }}
+          />
+        </ImageBackground>
       </SafeAreaView>
     ) : (
       <View style={styles.textContainer}>
@@ -211,5 +198,10 @@ const styles = StyleSheet.create({
   },
   iconbutton: {
     marginTop: 30,
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
   },
 });
