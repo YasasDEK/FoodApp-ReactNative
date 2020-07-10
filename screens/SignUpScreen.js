@@ -184,6 +184,12 @@ const SignInScreen = ({ navigation }) => {
         <View style={styles.container}>
             <StatusBar backgroundColor="#009387" barStyle="light-content" />
             <View style={styles.header}>
+            <Icon.Button
+                name="ios-arrow-back"
+                size={25}
+                backgroundColor="#009387"
+                onPress={() => navigation.navigate('SignInScreen')}
+            />
                 <Text style={styles.text_header}>Register Now!</Text>
             </View>
             <Animatable.View
