@@ -15,10 +15,15 @@ import ProfileScreen from './ProfileScreen';
 import AddFoodScreen from './AddFoodScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
+import EditFoodScreen from './EditFoodScreen';
+import EditProfileScreen from './EditProfileScreen';
 
 const HomeStack = createStackNavigator();
 const DetailsStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
+const EditFoodStack = createStackNavigator();
+const EditProfileStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const MainTabScreen = ({navigation}) => (
@@ -35,10 +40,10 @@ const MainTabScreen = ({navigation}) => (
       }}
     />
     <Tab.Screen
-      name="My Foods"
+      name="Details"
       component={DetailsStackScreen}
       options={{
-        tabBarLabel: 'Food',
+        tabBarLabel: 'All Foods',
         tabBarColor: '#009387',
         tabBarIcon: ({color}) => (
           <Icon name="ios-restaurant" color={color} size={26} />
@@ -49,7 +54,7 @@ const MainTabScreen = ({navigation}) => (
       name="Add Food"
       component={AddFoodScreen}
       options={{
-        tabBarLabel: 'AddFood',
+        tabBarLabel: 'Add Food',
         tabBarColor: '#009387',
         tabBarIcon: ({color}) => (
           <Icon name="ios-add-circle" color={color} size={26} />
