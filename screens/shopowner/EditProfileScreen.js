@@ -7,7 +7,8 @@ import firebase from '@react-native-firebase/app';
 import Auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
-import FoodImagePicker from './FoodImagePicker';
+import ProfileImagePicker from './ProfileImagePicker';
+import ProfileScreen from './ProfileScreen';
 import {
   View,
   Text,
@@ -28,81 +29,83 @@ import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from 'react-native-paper';
 
-const EditFoodScreen = ({ route, navigation }) => {
-  const { foodid } = route.params;
+const EditProfileScreen = ({ route, navigation }) => {
+
+  const { shopemail } = route.params;
   const { colors } = useTheme();
 
   const [data, setData] = React.useState({
-    foodname: '',
+    ownername: '',
+    shopname: '',
+    shopmobile: '',
     imageuri: '',
-    image: '',
-    price: '',
-    ingredients: '',
-    tagname: '',
-    check_foodname: false,
-    check_ingredients: false,
-    check_tagname: false,
-    check_price: false,
+    check_ownername: false,
+    check_shopname: false,
+    check_shopmobile: false,
     secureTextEntry: true,
     confirm_secureTextEntry: true,
   });
 
-  const editFoodHandle = (foodname, ingredients, tagname, price) => {
+  const editFoodHandle = (shopowner, shopname, shopmobile) => {
+    console.log(shopemail);
     var user = firebase.auth().currentUser;
-
-    if (foodname !== '') {
-        firestore().collection('foods').doc(foodid).update({foodname: foodname});
-        Alert.alert('update done');
+    console.log(user);
+    console.log('name : ' + user.displayName + 'email : ' + user.email + 'uid : ' + user.uid);
+    if (shopowner !== '') {
+      firestore().collection('shops').doc(user.uid).update({ ownername: shopowner });
+      Alert.alert('update done');
+      console.log('done');
     }
-    if (ingredients !== '') {
-        firestore().collection('foods').doc(foodid).update({ingredients: ingredients});
-        Alert.alert('update done');
+    if (shopname !== '') {
+      firestore().collection('shops').doc(user.uid).update({ shopname: shopname });
+      Alert.alert('update done');
+      console.log('done');
     }
-    if (tagname !== '') {
-        firestore().collection('foods').doc(foodid).update({tagename: tagname});
-        Alert.alert('update done');
+    if (shopmobile !== '') {
+      firestore().collection('shops').doc(user.uid).update({ shopmobile: shopmobile });
+      Alert.alert('update done');
+      console.log('done');
     }
-    if (price !== '' && isNaN(price) === false) {
-        firestore().collection('foods').doc(foodid).update({price: price});
-        Alert.alert('update done');
+    if (shopmobile === '' && shopname === '' && shopowner === '' && data.imageuri === ''){
+      Alert.alert('Nothing to update');
     }
     if (data.imageuri) {
-        const fileExtension = data.imageuri.split('.').pop();
-        console.log('EXT: ' + fileExtension);
-        // var uuid = uuidv4();
+      const fileExtension = data.imageuri.split('.').pop();
+      console.log('EXT: ' + fileExtension);
+      // var uuid = uuidv4();
 
-        const fileName = `${user.uid}.${data.foodname}.${fileExtension}`;
-        console.log(fileName);
+      const fileName = `${user.uid}.${fileExtension}`;
+      console.log(fileName);
 
-        var storageRef = firebase.storage().ref(`foods/images/${fileName}`);
+      var storageRef = firebase.storage().ref(`shops/images/${fileName}`);
 
-        storageRef.putFile(data.imageuri)
-          .on(
-            firebase.storage.TaskEvent.STATE_CHANGED,
-            snapshot => {
-              console.log('snapshot: ' + snapshot.state);
-              console.log('progress: ' + (snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+      storageRef.putFile(data.imageuri)
+        .on(
+          firebase.storage.TaskEvent.STATE_CHANGED,
+          snapshot => {
+            console.log('snapshot: ' + snapshot.state);
+            console.log('progress: ' + (snapshot.bytesTransferred / snapshot.totalBytes) * 100);
 
-              if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
-                console.log('Success');
-              }
-            },
-            error => {
-              console.log('image upload error: ' + error.toString());
-            },
-            () => {
-              storageRef.getDownloadURL()
-                .then((downloadurl) => {
-                  console.log('File available at: ' + downloadurl);
-                  firebase.firestore().collection('foods').doc(foodid).update({ imageuri: downloadurl });
-                  Alert.alert('New image added successfully');
-                });
+            if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
+              console.log('Success');
             }
-          );
-      }
+          },
+          error => {
+            console.log('image upload error: ' + error.toString());
+          },
+          () => {
+            storageRef.getDownloadURL()
+              .then((downloadurl) => {
+                console.log('File available at: ' + downloadurl);
+                firebase.firestore().collection('shops').doc(user.uid).update({ imageuri: downloadurl });
+                Alert.alert('New image added successfully');
+              });
+          }
+        );
+    }
   };
 
-  const setFoodImage = (image) => {
+  const setProfileImage = (image) => {
     setData({
       ...data,
       imageuri: image.uri,
@@ -111,66 +114,50 @@ const EditFoodScreen = ({ route, navigation }) => {
     console.log('data.imageuri = ' + data.imageuri);
   };
 
-  const foodnameInputChange = (val) => {
+  const shopnameInputChange = (val) => {
     if (val.length !== 0) {
       setData({
         ...data,
-        foodname: val,
-        check_foodname: true
+        shopname: val,
+        check_shopname: true
       });
     } else {
       setData({
         ...data,
-        foodname: val,
-        check_foodname: false
+        shopname: val,
+        check_shopname: false
       });
     }
   };
 
-  const ingredientsInputChange = (val) => {
+  const ownernameInputChange = (val) => {
     if (val.length !== 0) {
       setData({
         ...data,
-        ingredients: val,
-        check_ingredients: true
+        ownername: val,
+        check_ownername: true
       });
     } else {
       setData({
         ...data,
-        ingredients: val,
-        check_ingredients: false
+        ownername: val,
+        check_ownername: false
       });
     }
   };
 
-  const priceInputChange = (val) => {
-    if (val.length !== 0 && isNaN(val) === false) {
+  const mobileInputChange = (val) => {
+    if (val.length === 10 && isNaN(val) === false) {
       setData({
         ...data,
-        price: val,
-        check_price: true
+        shopmobile: val,
+        check_shopmobile: true
       });
     } else {
       setData({
         ...data,
-        price: val,
-        check_price: false
-      });
-    }
-  };
-
-  const tagnameInputChange = (val) => {
-    if (val.length !== 0) {
-      setData({
-        ...data,
-        tagname: val,
-        check_tagname: true
-      });
-    } else {
-      setData({
-        ...data,
-        tagname: val,
-        check_tagname: false
+        shopmobile: val,
+        check_shopmobile: false
       });
     }
   };
@@ -199,7 +186,8 @@ const EditFoodScreen = ({ route, navigation }) => {
         onPress={() => navigation.navigate('HomeDrawer')}
       />
       <View style={styles.header}>
-        <Text style={styles.text_header}>EDIT FOOD ITEM!</Text>
+        <Text style={styles.text_header}>
+          EDIT USER PROFILE!</Text>
       </View>
       <Animatable.View
         animation="fadeInUpBig"
@@ -210,7 +198,7 @@ const EditFoodScreen = ({ route, navigation }) => {
         <ScrollView>
           <Text style={[styles.text_footer, {
             color: colors.text,
-          }]}>Update the food</Text>
+          }]}>Change shop name</Text>
           <View style={styles.action}>
             <FontAwesome
               name="shopping-cart"
@@ -218,15 +206,15 @@ const EditFoodScreen = ({ route, navigation }) => {
               size={20}
             />
             <TextInput
-              placeholder="Ex: pizza"
+              placeholder="shop name"
               placeholderTextColor="#666666"
               style={[styles.textInput, {
                 color: colors.text
-            }]}
+              }]}
               autoCapitalize="none"
-              onChangeText={(val) => foodnameInputChange(val)}
+              onChangeText={(val) => shopnameInputChange(val)}
             />
-            {data.check_foodname ?
+            {data.check_shopname ?
               <Animatable.View
                 animation="bounceIn"
               >
@@ -242,7 +230,7 @@ const EditFoodScreen = ({ route, navigation }) => {
           <Text style={[styles.text_footer, {
             marginTop: 35,
             color: colors.text
-          }]}>Update ingredients</Text>
+          }]}>Change owner name</Text>
           <View style={styles.action}>
             <FontAwesome
               name="user-o"
@@ -250,15 +238,15 @@ const EditFoodScreen = ({ route, navigation }) => {
               size={20}
             />
             <TextInput
-              placeholder="Ex: flour, oil, salt etc "
+              placeholder="owner name"
               placeholderTextColor="#666666"
               style={[styles.textInput, {
                 color: colors.text
-            }]}
+              }]}
               autoCapitalize="none"
-              onChangeText={(val) => ingredientsInputChange(val)}
+              onChangeText={(val) => ownernameInputChange(val)}
             />
-            {data.check_ingredients ?
+            {data.check_ownername ?
               <Animatable.View
                 animation="bounceIn"
               >
@@ -274,55 +262,23 @@ const EditFoodScreen = ({ route, navigation }) => {
           <Text style={[styles.text_footer, {
             color: colors.text,
             marginTop: 35
-          }]}>Update price (LKR)</Text>
+          }]}>Change mobile number</Text>
           <View style={styles.action}>
             <FontAwesome
-              name="database"
+              name="mobile"
               color={colors.text}
               size={20}
             />
             <TextInput
-              placeholder="Ex: flour, oil, salt etc "
+              placeholder="mobile number"
               placeholderTextColor="#666666"
               style={[styles.textInput, {
                 color: colors.text
-            }]}
+              }]}
               autoCapitalize="none"
-              onChangeText={(val) => priceInputChange(val)}
+              onChangeText={(val) => mobileInputChange(val)}
             />
-            {data.check_price ?
-              <Animatable.View
-                animation="bounceIn"
-              >
-                <Feather
-                  name="check-circle"
-                  color="green"
-                  size={20}
-                />
-              </Animatable.View>
-              : null}
-          </View>
-
-          <Text style={[styles.text_footer, {
-            color: colors.text,
-            marginTop: 35
-          }]}>Update tag name</Text>
-          <View style={styles.action}>
-            <FontAwesome
-              name="mail-reply"
-              color={colors.text}
-              size={20}
-            />
-            <TextInput
-              placeholder="Ex: pizza"
-              placeholderTextColor="#666666"
-              style={[styles.textInput, {
-                color: colors.text
-            }]}
-              autoCapitalize="none"
-              onChangeText={(val) => tagnameInputChange(val)}
-            />
-            {data.check_tagname ?
+            {data.check_shopmobile ?
               <Animatable.View
                 animation="bounceIn"
               >
@@ -341,19 +297,19 @@ const EditFoodScreen = ({ route, navigation }) => {
           }]}>Update image</Text>
 
           {/*for image*/}
-          <FoodImagePicker image={data.image} onImagePicked={setFoodImage} />
+          <ProfileImagePicker image={data.image} onImagePicked={setProfileImage} />
 
           <View style={styles.button}>
             <TouchableOpacity
               style={styles.signIn}
-              onPress={() => { editFoodHandle(data.foodname, data.ingredients, data.tagname, data.price);
+              onPress={() => { editFoodHandle(data.ownername, data.shopname, data.shopmobile);
                 navigation.navigate('HomeDrawer'); }}
             >
               <LinearGradient
                 colors={['#08d4c4', '#01ab9d']}
                 style={styles.signIn}
               >
-                <Text style={[styles.textSign, { color: '#fff' }]}>Update Food</Text>
+                <Text style={[styles.textSign, { color: '#fff' }]}>Update Profile</Text>
               </LinearGradient>
             </TouchableOpacity>
 
@@ -364,7 +320,7 @@ const EditFoodScreen = ({ route, navigation }) => {
   );
 };
 
-export default EditFoodScreen;
+export default EditProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
